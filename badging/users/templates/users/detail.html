@@ -1,0 +1,15 @@
+<h1>{{ person.name }}</h1>
+
+<h2>Badge List:</h2>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<ul>
+{% for badge in person.badge_set.all %}
+	<li>{{ badge.name }}</li>
+{% endfor %}
+</ul>
+
+<form action="{% url 'users:badge' person.id %}">
+	<input type="submit" value="Add Badge">
+</form>

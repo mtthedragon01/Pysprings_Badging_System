@@ -1,0 +1,16 @@
+<h1>Adding Badge</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+Badges have names and presenters
+<form action="{% url 'users:add_badge' person.id %}" method="post">
+{% csrf_token %}
+	Name:<br>
+	<input type="text" name="name" value="">
+	<br>
+	Presenter:<br>
+	<input type="text" name="presenter" value="">
+	<br>
+	
+	<input type="submit" value="Add" />
+</form>
