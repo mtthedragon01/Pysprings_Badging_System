@@ -16,7 +16,9 @@ Installation
 
 Contribution Guide
 ------------------
-Pull requests welcome.
+- Pull requests welcome.
+- Summarize your change in the present imperative on the first of your commits.
+- Please reference any tickets that should be closed in the body so GitHub will do so automatically.
 
 License
 -------
