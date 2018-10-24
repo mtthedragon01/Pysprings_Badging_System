@@ -25,20 +25,17 @@ def badge(request, person_id):
 	return render(request, 'users/badge.html', {'person': person})
 	
 def add_person(request):
-	try:
-		p_name = request.POST['name']
-	except (KeyError, Name.DoesNotExist):
+	p = Person(name = request.POST['name'])
+	if len(p.name) == 0:
 		latest_person_list = Person.objects.order_by('-name')
 		context = { 'latest_person_list' : latest_person_list, 'error_message' : "Invalid Person Name"}		
 		return render(request, 'users/index.html', context )
 	else:
 		latest_person_list = Person.objects.order_by('-name')
 		for person in latest_person_list:
-			person_name = person.name
-			if p_name == person_name:
+			if p.name == person.name:
 				context = { 'latest_person_list' : latest_person_list, 'error_message' : "Person already exists"}
 				return render(request, 'users/index.html', context)
-		p = Person(name = p_name)
 		p.save()
 		latest_person_list = Person.objects.order_by('-name')
 		context = { 'latest_person_list' : latest_person_list, }
@@ -47,15 +44,13 @@ def add_person(request):
 def add_badge(request, person_id):
 	person = get_object_or_404(Person, pk = person_id)
 	#Tries and excepts must be changed so no blank badges can be entered
-	try:
-		b_name = request.POST['name']
-		b_presenter = request.POST['presenter']
-	except (KeyError, Name.DoesNotExist):
+	b = Badge(name = request.POST['name'], presenter = request.POST['presenter'])
+	if len(b.name) == 0:
 		return render(request, 'users/badge.html', {
 			'person': person,
 			'error_message': "Invalid Badge Name.",
 		})
-	except (KeyError, Presenter.DoesNotExist):
+	elif len(b.presenter) == 0:
 		return render(request, 'users/badge.html', {
 			'person': person,
 			'error_message': "Invalid Presenter Name.",
@@ -64,11 +59,11 @@ def add_badge(request, person_id):
 		badge_list = person.badge_set.order_by('-name')
 		for badge in badge_list:
 			badge_name = badge.name
-			if b_name == badge_name:
+			if b.name == badge_name:
 				return render(request, 'users/badge.html', {
 				'person': person,
 				'error_message': "Badge already exists.",
 				})
-		person.badge_set.create(name = b_name, presenter = b_presenter)
+		person.badge_set.create(name = b.name, presenter = b.presenter)
 		#print(request.POST)
 		return render(request, 'users/detail.html', {'person' : person})
